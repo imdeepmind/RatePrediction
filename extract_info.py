@@ -1,20 +1,39 @@
-# This file remove all unnecessary columns and merge the datasets into one dataset
+# This script will remove all unnecessary columns and merge the datasets into one dataset
 
 import pandas as pd
+import os
 
-data1 = pd.read_csv('dataset/amazon_reviews_us_Musical_Instruments_v1_00.tsv', sep='\t', error_bad_lines=False)
-data2 = pd.read_csv('dataset/amazon_reviews_us_Office_Products_v1_00.tsv', sep='\t', error_bad_lines=False)
+COUNTER = 0
+stars = []
+dataFiles = ['dataset/amazon_reviews_us_Musical_Instruments_v1_00.tsv', 'dataset/amazon_reviews_us_Office_Products_v1_00.tsv']
 
-data1 = data1[data1['verified_purchase'] == 'Y']
-data2 = data2[data2['verified_purchase'] == 'Y']
+path = 'dataset/reviews/'
+if not os.path.exists(path):
+    os.makedirs(path)
 
-data1 = data1[['review_body', 'star_rating']]
-data2 = data2[['review_body', 'star_rating']]
+for f in dataFiles:
+    data = pd.read_csv(f, sep='\t', error_bad_lines=False)
 
-data = pd.concat((data1, data2))
+    data = data[data['verified_purchase'] == 'Y']
 
-del data1, data2
+    data = data[['review_body', 'star_rating']]
 
-data.columns = ['review', 'star']
+    data = data.values
 
-data.to_csv('dataset/reviews.csv', index=False)
+    for dt in data:
+        with open('dataset/reviews/' + str(COUNTER+1) + '.txt', 'w') as file:
+            # May need to add some filters
+            if isinstance(dt[0], str):
+                file.write(dt[0])
+                stars.append(dt[1])
+                COUNTER += 1
+    
+    del data
+
+
+star_df = pd.DataFrame(columns=['id', 'star'])
+
+star_df['id'] = range(1, len(stars)+1)
+star_df['star'] = pd.Series(stars)
+
+star_df.to_csv('dataset/meta.csv', index=False)
