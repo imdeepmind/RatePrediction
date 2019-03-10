@@ -63,3 +63,6 @@ model.fit_generator(train_gen,
                     steps_per_epoch=100,
                     validation_data=test_gen,
                     validation_steps=50)
+
+
+model.save('model.h5')
