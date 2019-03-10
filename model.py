@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 from keras.preprocessing.text import one_hot
 from keras.preprocessing.sequence import pad_sequences
+from keras.models import Sequential
+from keras.layers import Dense, Flatten
+from keras.layers.embeddings import Embedding
 
 VOCAB_SIZE = 50000
 MAX_LENGTH = 50
@@ -35,3 +38,20 @@ def generate_batch(index, stars, batch_size):
         counter = (counter + batch_size) % len(index)
         
         yield reviews, tempStars
+
+
+
+
+model = Sequential()
+
+model.add(Embedding(VOCAB_SIZE, 32, input_length=MAX_LENGTH))
+model.add(Flatten())
+model.add(Dense(250, activation='relu'))
+model.add(Dense(NO_OF_CLASSES, activation='softmax'))
+
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+print(model.summary())
+
+gen = generate_batch(files=(index, stars), batch_size=32)
+model.fit_generator(gen)
