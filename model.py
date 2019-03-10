@@ -53,5 +53,8 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 
 print(model.summary())
 
-gen = generate_batch(files=(index, stars), batch_size=32)
-model.fit_generator(gen)
+gen = generate_batch(index=index, stars=stars, batch_size=32)
+model.fit_generator(gen,
+                    epochs=10,
+                    steps_per_epoch=100)
+
