@@ -8,8 +8,8 @@ MAX_LENGTH = 50
 NO_OF_CLASSES = 5
 meta = pd.read_csv('dataset/meta.csv')
 
-index = meta['id']
-stars = meta['star']
+index = meta['id'].values
+stars = pd.get_dummies(meta['star']).values
 
 del meta
 
@@ -35,4 +35,3 @@ def generate_batch(index, stars, batch_size):
         counter = (counter + batch_size) % len(index)
         
         yield reviews, tempStars
-
