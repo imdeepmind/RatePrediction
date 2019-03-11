@@ -8,9 +8,12 @@ from keras.layers.embeddings import Embedding
 from sklearn.model_selection import train_test_split
 
 VOCAB_SIZE = 50000
-MAX_LENGTH = 50
+MAX_LENGTH = 30
 NO_OF_CLASSES = 5
 meta = pd.read_csv('dataset/meta.csv')
+meta = meta.sample(frac=1)
+
+print(meta.head())
 
 index = meta['id'].values
 stars = pd.get_dummies(meta['star']).values
@@ -27,7 +30,7 @@ def generate_batch(X, y, batch_size):
         reviews = []
         
         for rev in tempIndex:
-            with open('dataset/reviews/' + str(rev) + '.txt', 'r') as file:
+            with open('dataset/reviewstxt/' + str(rev) + '.txt', 'r') as file:
                 review = file.read()
 
                 review_hot = one_hot(review, VOCAB_SIZE)
@@ -60,9 +63,9 @@ test_gen = generate_batch(X=X_test, y=y_test, batch_size=32)
 
 model.fit_generator(train_gen,
                     epochs=10,
-                    steps_per_epoch=100,
+                    steps_per_epoch=200,
                     validation_data=test_gen,
-                    validation_steps=50)
+                    validation_steps=500)
 
 
 model.save('model.h5')
