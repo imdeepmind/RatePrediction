@@ -3,7 +3,7 @@ from keras.preprocessing.text import one_hot
 from keras.preprocessing.sequence import pad_sequences
 
 VOCAB_SIZE = 50000
-MAX_LENGTH = 50
+MAX_LENGTH = 80
 
 def process_review(review):
     review = one_hot(review, VOCAB_SIZE)

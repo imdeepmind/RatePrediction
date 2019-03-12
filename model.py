@@ -6,6 +6,8 @@ from keras.models import Sequential
 from keras.layers import Dense, Flatten
 from keras.layers.embeddings import Embedding
 from sklearn.model_selection import train_test_split
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 
 VOCAB_SIZE = 50000
 MAX_LENGTH = 30
@@ -32,6 +34,10 @@ def generate_batch(X, y, batch_size):
         for rev in tempIndex:
             with open('dataset/reviewstxt/' + str(rev) + '.txt', 'r') as file:
                 review = file.read()
+                
+                review = review.lower()
+                
+                
 
                 review_hot = one_hot(review, VOCAB_SIZE)
                 
