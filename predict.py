@@ -37,7 +37,7 @@ def process_review(review):
 def predict():
     model = keras.models.load_model('model.h5')
 
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     
     review = input('Please type a review: ')
     

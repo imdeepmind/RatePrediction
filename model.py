@@ -1,22 +1,24 @@
-import numpy as np
 import pandas as pd
 from keras.preprocessing.text import one_hot
 from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
-from keras.layers import Dense, Flatten, LSTM, Dropout
+from keras.layers import Dense, LSTM, Dropout, Flatten
 from keras.layers.embeddings import Embedding
 from sklearn.model_selection import train_test_split
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import re
+from keras import optimizers as op
 
 VOCAB_SIZE = 50000
 MAX_LENGTH = 80
 NO_OF_CLASSES = 5
 BATCH_SIZE = 64
 
-meta = pd.read_csv('dataset/meta.csv')
+meta = pd.read_csv('meta.csv')
 meta = meta.sample(frac=1)
+
+# meta = meta.head(200000)
 
 index = meta['id'].values
 stars = pd.get_dummies(meta['star']).values
@@ -44,7 +46,7 @@ def generate_batch(X, y, batch_size):
         reviews = []
         
         for rev in tempIndex:
-            with open('dataset/reviewstxt/' + str(rev) + '.txt', 'r') as file:
+            with open('reviewstxt/' + str(rev) + '.txt', 'r') as file:
                 review = file.read()
 
                 review = clean_review(review)
@@ -79,14 +81,15 @@ def generate_batch(X, y, batch_size):
 model = Sequential()
 
 model.add(Embedding(VOCAB_SIZE, 32, input_length=MAX_LENGTH))
-
-model.add(LSTM(100))
-
-model.add(Dropout(0.33))
-
+model.add(Flatten())
+model.add(Dense(150, activation='relu'))
+model.add(Dropout(0.50))
 model.add(Dense(NO_OF_CLASSES, activation='softmax'))
 
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# model.compile(loss='categorical_crossentropy', optimizer=op.SGD(lr=0.01), metrics=['accuracy'])
+# model.compile(loss='categorical_crossentropy', optimizer=op.RMSprop(lr=2e-5), metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 print(model.summary())
 
@@ -94,7 +97,7 @@ train_gen = generate_batch(X=X_train, y=y_train, batch_size=BATCH_SIZE)
 test_gen = generate_batch(X=X_test, y=y_test, batch_size=BATCH_SIZE)
 
 model.fit_generator(train_gen,
-                    epochs=3,
+                    epochs=2,
                     steps_per_epoch=int(length_train/(BATCH_SIZE)),
                     validation_data=test_gen,
                     validation_steps=int(length_test/(BATCH_SIZE)))
