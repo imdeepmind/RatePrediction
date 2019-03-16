@@ -1,3 +1,6 @@
 dataset
 model.h5
 .ipynb_checkpoints
+glove.6B.50d.txt
+model_rnn.h5
+model_ann.h5
