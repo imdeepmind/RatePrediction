@@ -2,7 +2,7 @@ import pandas as pd
 from keras.preprocessing.text import one_hot
 from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Dropout, Flatten
+from keras.layers import Dense, LSTM, Dropout, Flatten, CuDNNLSTM
 from keras.layers.embeddings import Embedding
 from sklearn.model_selection import train_test_split
 from nltk.corpus import stopwords
@@ -80,9 +80,10 @@ def generate_batch(X, y, batch_size):
 
 model = Sequential()
 
-model.add(Embedding(VOCAB_SIZE, 32, input_length=MAX_LENGTH))
-model.add(LSTM(150, activation='relu'))
-model.add(Dropout(0.50))
+model.add(Embedding(VOCAB_SIZE, 64, input_length=MAX_LENGTH))
+
+model.add(CuDNNLSTM(32))
+
 model.add(Dense(NO_OF_CLASSES, activation='softmax'))
 
 
@@ -102,4 +103,4 @@ model.fit_generator(train_gen,
                     validation_steps=int(length_test/(BATCH_SIZE)))
 
 
-model.save('model.h5')
+model.save('model_rnn.h5')

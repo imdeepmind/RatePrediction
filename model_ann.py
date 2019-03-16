@@ -103,4 +103,4 @@ model.fit_generator(train_gen,
                     validation_steps=int(length_test/(BATCH_SIZE)))
 
 
-model.save('model.h5')
+model.save('model_ann.h5')
