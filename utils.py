@@ -48,14 +48,6 @@ def clean_review(review):
     review = [t for t in review if not t in stop_words]            
     return review
 
-def tokenize_text(ids):
-    t = Tokenizer()
-    for id in ids:
-        with open('dataset/reviewstxt/' + str(id) + '.txt', 'r') as file:
-            review = clean_review(file.read())            
-            t.fit_on_texts(review)
-    return t
-
 def generate_batch(X, y, batch_size, vocab_length, max_length, no_classes, t):
     counter = 0
     X = X[0: int(len(X) / batch_size) * batch_size]
