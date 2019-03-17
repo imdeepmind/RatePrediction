@@ -5,7 +5,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import re
 
-VOCAB_SIZE = 50000
+VOCAB_SIZE = 400001
 MAX_LENGTH = 80
 
 def clean_review(review):
