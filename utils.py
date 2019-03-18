@@ -48,7 +48,30 @@ def clean_review(review):
     review = [t for t in review if not t in stop_words]            
     return review
 
-def generate_batch(X, y, batch_size, vocab_length, max_length, no_classes, t):
+def text_to_vec(review, model, max_length):
+    zeros = np.zeros(100).tolist()
+    
+    review = clean_review(review)
+    
+    if len(review) >= 80:
+        review = review[0:80]
+    
+    
+    vector = []
+    for word in review:
+        if word in model.vocab:
+            vector += model['word'].tolist()
+        else:
+            vector += zeros
+
+    if len(vector) < max_length * 100:
+        size = len(vector)
+        extraArr = np.zeros((max_length*100) - size).tolist()
+        vector += extraArr
+    
+    return vector
+
+def generate_batch(X, y, batch_size, vocab_length, max_length, no_classes, model):
     counter = 0
     X = X[0: int(len(X) / batch_size) * batch_size]
     y = y[0: int(len(y) / batch_size) * batch_size]
@@ -59,10 +82,8 @@ def generate_batch(X, y, batch_size, vocab_length, max_length, no_classes, t):
         for rev in tempIndex:
             with open('dataset/reviewstxt/' + str(rev) + '.txt', 'r') as file:
                 review = file.read()
-                review = clean_review(review)
-                
-                review_sequence = t.texts_to_sequences(review)
-                reviews.append(review_sequence)
+                review = text_to_vec(review, model, max_length)
+                reviews.append(review)
                 
         if len(reviews) <= 0:
           counter = 0
