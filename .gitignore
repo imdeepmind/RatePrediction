@@ -4,3 +4,4 @@ model.h5
 glove.6B.50d.txt
 model_rnn.h5
 model_ann.h5
+model.bin
