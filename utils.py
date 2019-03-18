@@ -7,45 +7,19 @@ from keras.preprocessing.text import one_hot
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 
-def readGloveFile(gloveFile):
-    with open(gloveFile, 'r') as f:
-        wordToGlove = {}  
-        wordToIndex = {} 
-        indexToWord = {} 
-
-        for line in f:
-            record = line.strip().split()
-            token = record[0] 
-            wordToGlove[token] = np.array(record[1:], dtype=np.float64) 
-
-        tokens = sorted(wordToGlove.keys())
-        for idx, tok in enumerate(tokens):
-            kerasIdx = idx + 1  
-            wordToIndex[tok] = kerasIdx
-            indexToWord[kerasIdx] = tok
-
-    return wordToIndex, indexToWord, wordToGlove
-
-def createPretrainedEmbeddingLayer(wordToGlove, wordToIndex, isTrainable):
-    vocabLen = len(wordToIndex) + 1
-    embDim = next(iter(wordToGlove.values())).shape[0] 
-
-    embeddingMatrix = np.zeros((vocabLen, embDim))
-    for word, index in wordToIndex.items():
-        embeddingMatrix[index, :] = wordToGlove[word] 
-
-    embeddingLayer = Embedding(vocabLen, embDim, weights=[embeddingMatrix], trainable=isTrainable)
-    return embeddingLayer
-
 def clean_review(review):
     review = review.lower()
     review = re.sub(r'''(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))''', '', review, flags=re.MULTILINE)
     review = re.sub(r'(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)', '', review)
     review = re.sub(r'\b[0-9]+\b\s*', '', review)
+    
     review = word_tokenize(review) 
+    
     review = [t for t in review if t.isalpha()] 
+    
     stop_words = set(stopwords.words('english'))
-    review = [t for t in review if not t in stop_words]            
+    review = [t for t in review if not t in stop_words]  
+          
     return review
 
 def text_to_vec(review, model, max_length):
@@ -83,8 +57,8 @@ def generate_batch(X, y, batch_size, vocab_length, max_length, no_classes, model
             with open('dataset/reviewstxt/' + str(rev) + '.txt', 'r') as file:
                 review = file.read()
                 review = text_to_vec(review, model, max_length)
+                review = np.array(review).reshape(1, 100*max_length, 1)
                 reviews.append(review)
-                
         if len(reviews) <= 0:
           counter = 0
           continue
@@ -93,7 +67,7 @@ def generate_batch(X, y, batch_size, vocab_length, max_length, no_classes, model
         tempStars = y[counter:counter + batch_size]    
         counter = (counter + batch_size) % len(X) 
         
-        assert reviews.shape == (batch_size, max_length), "{} is not matching with {}".format(reviews.shape, (batch_size, max_length))
-        assert tempStars.shape == (batch_size, no_classes), "{} is not matching with {}".format(tempStars.shape, (batch_size, no_classes))    
+        #assert reviews.shape == (batch_size, max_length), "{} is not matching with {}".format(reviews.shape, (batch_size, max_length))
+        #assert tempStars.shape == (batch_size, no_classes), "{} is not matching with {}".format(tempStars.shape, (batch_size, no_classes))    
         
         yield reviews, tempStars
