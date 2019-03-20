@@ -1,54 +1,34 @@
-import keras
-from keras.preprocessing.text import one_hot
-from keras.preprocessing.sequence import pad_sequences
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-import re
+# Dependencies
+import keras 
+import gensim
+from utils import text_to_vec
 
-VOCAB_SIZE = 400001
-MAX_LENGTH = 80
-
-def clean_review(review):
-    review = review.lower()
-    review = re.sub(r'''(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))''', '', review, flags=re.MULTILINE)
-    review = re.sub(r'(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)', '', review)
-    review = re.sub(r'\b[0-9]+\b\s*', '', review)
-    return review
-
-
-def process_review(review):
-    review = clean_review(review)
-                
-    review = word_tokenize(review)
+def predict(model='rnn'):
+    # Word2Vec Model
+    word2vec_model = gensim.models.KeyedVectors.load_word2vec_format('model.bin', binary=True)
     
-    review = [t for t in review if t.isalpha()]
-    stop_words = set(stopwords.words('english'))
-    review = [t for t in review if not t in stop_words]
-    
-    review = " ".join(review)
-    
-    review = one_hot(review, VOCAB_SIZE)
-    
-    review = pad_sequences([review], maxlen=MAX_LENGTH, padding='post')
-    
-    return review
-
-
-def predict():
+    # Main Model
     model = keras.models.load_model('model.h5')
-
+    
+    # Compiling the model
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     
+    # Asking the user to type a review
     review = input('Please type a review: ')
     
-    processedReview = process_review(review)
+    # Converting the review to vector
+    processedReview = text_to_vec(review, word2vec_model, 80)
     
+    # Predicting the class
     predict_class = model.predict_classes(processedReview)
     
+    # Predicting probs
     predict_prob = model.predict(processedReview)
     
+    # Printing the class and prob values
     print(predict_class[0] + 1, predict_prob)
-    
 
-while True:
-    predict()
+if __name__ == '__main__':
+    # Running the loop forever
+    while True:
+        predict('rnn')

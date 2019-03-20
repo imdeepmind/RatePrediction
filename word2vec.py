@@ -1,3 +1,5 @@
+# TODO: Need to improve this code
+
 import gensim 
 import pandas as pd
 from utils import clean_review
