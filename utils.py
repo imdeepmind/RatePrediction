@@ -45,7 +45,7 @@ def text_to_vec(review, model, max_length):
     
     return vector
 
-def generate_batch(X, y, batch_size, vocab_length, max_length, no_classes, model):
+def generate_batch(X, y, batch_size, vocab_length, max_length, no_classes, model, ismatrix=False):
     counter = 0
     X = X[0: int(len(X) / batch_size) * batch_size]
     y = y[0: int(len(y) / batch_size) * batch_size]
@@ -57,16 +57,16 @@ def generate_batch(X, y, batch_size, vocab_length, max_length, no_classes, model
             with open('dataset/reviewstxt/' + str(rev) + '.txt', 'r') as file:
                 review = file.read()
                 review = text_to_vec(review, model, max_length)
+                if ismatrix:
+                    review = np.array(review)
+                    review = review.reshape(100, max_length)
                 reviews.append(review)
         if len(reviews) <= 0:
           counter = 0
           continue
                 
-        reviews = np.array(reviews).reshape(batch_size, 100*max_length)
+        reviews = np.array(reviews)
         tempStars = y[counter:counter + batch_size]    
         counter = (counter + batch_size) % len(X) 
-        
-        assert reviews.shape == (batch_size, max_length*100), "{} is not matching with {}".format(reviews.shape, (batch_size, max_length*100))
-        assert tempStars.shape == (batch_size, no_classes), "{} is not matching with {}".format(tempStars.shape, (batch_size, no_classes))    
-        
+
         yield reviews, tempStars
