@@ -1,11 +1,7 @@
 import re
 import numpy as np
-from keras.layers.embeddings import Embedding
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from keras.preprocessing.text import one_hot
-from keras.preprocessing.sequence import pad_sequences
-from keras.preprocessing.text import Tokenizer
 
 def clean_review(review):
     review = review.lower()

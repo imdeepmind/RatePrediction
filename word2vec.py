@@ -18,4 +18,4 @@ for id in ids:
         
 model = gensim.models.Word2Vec(sentences=reviews, size=100, window=5, workers=4, min_count=1)
 
-model.wv.save_word2vec_format('model.bin', binary=True)
+model.wv.save_word2vec_format('word2vec.bin', binary=True)

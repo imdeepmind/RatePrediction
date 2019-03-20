@@ -14,7 +14,7 @@ meta = pd.read_csv('dataset/meta.csv')
 meta = meta.sample(frac=1)
 
 # To limit the dataset. Useful for testing
-meta = meta.head(5000)
+#meta = meta.head(5000)
 
 # Selecting ids and ratings(star) column
 ids = meta['id'].values
@@ -33,7 +33,7 @@ del ids, ratings
 VOCAB_SIZE = len(word2vec_model.vocab)
 MAX_LENGTH = 80
 NO_OF_CLASSES = 5
-BATCH_SIZE = 2
+BATCH_SIZE = 64
 STEPS_PER_EPOCH = int(len(X_train)/BATCH_SIZE)
 VALIDATION_STEPS = int(len(X_test)/BATCH_SIZE)
 
