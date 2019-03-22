@@ -19,10 +19,15 @@ X = dataset[:, 0:80]
 y = dataset[:, 80]
 y = pd.get_dummies(y).values
 
+del dataset
+
 X_train, X_test, y_train, y_test = train_test_split(X,
                                                     y,
                                                     test_size=0.1, 
                                                     random_state=1969)
+
+del X, y
+
 model = Sequential()
 model.add(Embedding(VOCAB_SIZE, 32, input_length=MAX_WORDS))
 model.add(LSTM(32, activation='relu'))
@@ -32,4 +37,6 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 
 print(model.summary())
 
-model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=1, batch_size=32)
+model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=5, batch_size=64)
+
+model.save('data/model.h5')
