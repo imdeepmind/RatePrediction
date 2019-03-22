@@ -1,8 +1,8 @@
 # Dependencies
 import pickle
 import pandas as pd
-from keras.preprocessing.text import Tokenizer
 from utils import clean_review, remove_stopwords
+from keras.preprocessing.text import Tokenizer
 
 # Max number of words
 MAX_WORDS = 10000
@@ -13,7 +13,9 @@ tokenizer = Tokenizer(num_words=MAX_WORDS)
 # Reading the dataset
 path = 'data/dataset.csv'
 data = pd.read_csv(path)
-data = data.head(5000)
+
+# For now I'll train the tokenizer only on 50000 reviews
+data = data.head(50000)
 
 # We only need the reviews column
 reviews = data['reviews'].values
