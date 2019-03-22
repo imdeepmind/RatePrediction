@@ -13,6 +13,7 @@ tokenizer = Tokenizer(num_words=MAX_WORDS)
 # Reading the dataset
 path = 'data/dataset.csv'
 data = pd.read_csv(path)
+data = data.head(5000)
 
 # We only need the reviews column
 reviews = data['reviews'].values
@@ -30,7 +31,7 @@ for i in range(len(reviews)):
     review = remove_stopwords(review)
     
     # Fitting the tokenizer
-    tokenizer.fit_on_texts(review)
+    tokenizer.fit_on_texts([review])
     
     # Better to see something in the console
     if i % 1000 == 0:
