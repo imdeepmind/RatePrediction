@@ -7,6 +7,8 @@ from nltk.tokenize import word_tokenize
 import nltk
 from keras.preprocessing.sequence import pad_sequences
 import pickle
+import re
+from keras.backend import clear_session
 
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -18,14 +20,9 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 # Max number words in reviews
 MAX_WORDS = 80
 
-# Main Model
-model = keras.models.load_model('model.h5')
-
-# Compiling the model
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # Loading the word tokenizer
-with open(r"word_tokenizer.pickle", "rb") as input_file:
+with open(r"data/word_tokenizer.pickle", "rb") as input_file:
     tokenizer = pickle.load(input_file)
 
 # Cleaning the reviews
@@ -69,8 +66,8 @@ def index():
 def predict():
     try:
         # Asking the user to type a review
-        review = request.args.get('review')
-
+        review = request.form.get('review')
+            
         if review:
             # Cleaning the review
             review = clean_review(review)
@@ -81,21 +78,27 @@ def predict():
 
             # Padding sequences    
             review_vec_pad = pad_sequences(review_vec, MAX_WORDS, padding='post')
-            
-             # Predicting the class
+
+            # Main Model
+            model = keras.models.load_model('data/model.h5')
+
+            # Compiling the model
+            model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+            # Predicting the class
             predict_class = model.predict_classes(review_vec_pad)
-            
+                
             # Predicting probs
             predict_prob = model.predict(review_vec_pad)
-            
-            # Printing the class and prob values
-            #print(predict_class[0] + 1, predict_prob)
+
+            # Weird bug i guess
+            clear_session()
 
             return jsonify({
                 "success" : True,
                 "data": {
-                    "class" : predict_class[0],
-                    "prob" : predict_prob[0]
+                    "class" : str(predict_class[0]+1),
+                    "prob" : str(predict_prob[0])
                 }
             })
         else:
@@ -103,9 +106,9 @@ def predict():
                 "success" : False,
                 "message": "Please provide a review"
             })
-    except as Exception as ex:
-        print(ex)
+    except Exception as ex:
+        print(str(ex))
         return jsonify({
-            "success": False,
-            "message" : "Something went wrong"
+            "success" : False,
+            "message": "Something went wrong"
         })
