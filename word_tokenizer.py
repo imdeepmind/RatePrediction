@@ -15,7 +15,7 @@ path = 'data/dataset.csv'
 data = pd.read_csv(path)
 
 # For now I'll train the tokenizer only on 50000 reviews
-data = data.head(50000)
+# data = data.head(50000)
 
 # We only need the reviews column
 reviews = data['reviews'].values
