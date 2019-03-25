@@ -66,7 +66,9 @@ def index():
 def predict():
     try:
         # Asking the user to type a review
-        review = request.form.get('review')
+        data = request.get_json()
+        #data = json.loads(data)
+        review = data['review']
             
         if review:
             # Cleaning the review

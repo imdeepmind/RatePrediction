@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import StarRatings from 'react-star-ratings';
 
-const ENDPOINT = "https://somelink.com/"
+const ENDPOINT = "https://cryptic-earth-56224.herokuapp.com/"
 
 class App extends Component {
   constructor(props){
@@ -19,7 +19,7 @@ class App extends Component {
       review: this.state.review
     }
     if (data.review !== '' && data.review !== null){
-      axios.post(ENDPOINT, data)
+      axios.post(ENDPOINT + "predict/", data)
       .then(resp => this.setState({rating:resp.data.data.class}))
       .catch(err => this.setState({err:err}))
     }
