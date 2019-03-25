@@ -2,5 +2,6 @@ data/
 __pycache__/
 temp/
 .ipynb_checkpoints/
-heroku-rest-api/env/
-heroku-resy-api/data/
+demo-app/api/env/
+demo-app/api/data/
+demo-app/webapp/node_modules/
