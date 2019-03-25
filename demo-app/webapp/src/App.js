@@ -10,7 +10,8 @@ class App extends Component {
     this.state = {
       review: "",
       rating: 0,
-      err: false
+      err: false,
+      status: 'Submit',
     }
   }
   submitReview = (e) => {
@@ -19,9 +20,10 @@ class App extends Component {
       review: this.state.review
     }
     if (data.review !== '' && data.review !== null){
+      this.setState({status:"Loading"})
       axios.post(ENDPOINT + "predict/", data)
-      .then(resp => this.setState({rating:resp.data.data.class}))
-      .catch(err => this.setState({err:err}))
+      .then(resp => console.log(resp.data.data.class) || this.setState({status:"Submit"}) || this.setState({rating:Number(resp.data.data.class)}))
+      .catch(err => this.setState({status:"Submit"}) || this.setState({err:err}))
     }
   }
 
@@ -38,7 +40,7 @@ class App extends Component {
           <div className="form-group">
             <textarea className="form-control" placeholder="Write a review..." required onChange={(e) => this.setState({review:e.target.value})}></textarea>
           </div>
-          <button type="submit" className="btn btn-primary float-right" onClick={this.submitReview}>Submit</button>
+          <button type="submit" className="btn btn-primary float-right" onClick={this.submitReview}>{this.state.status}</button>
         </form>
         <div className="d-flex justify-content-center m-5">
           {this.state.err ? (
