@@ -12,7 +12,7 @@ with open(r"data/word_tokenizer.pickle", "rb") as input_file:
 MAX_WORDS = 80
 NO_OF_CLASSES = 5
 VOCAB_SIZE = 10000
-EPOCHS = 3
+EPOCHS = 10
 BATCH_SIZE = 1024
 
 dataset = np.load('data/preprocessed_dataset.npy')
@@ -35,16 +35,20 @@ model.add(Embedding(VOCAB_SIZE, 32, input_length=MAX_WORDS))
 
 model.add(Dropout(0.5))
 
-model.add(Conv1D(filters=512, kernel_size=5, activation='relu'))
+model.add(Conv1D(filters=256, kernel_size=3, activation='relu'))
+model.add(MaxPooling1D(3))
+
+model.add(Conv1D(filters=512, kernel_size=3, activation='relu'))
 model.add(MaxPooling1D(3))
 
 model.add(Dropout(0.5))
 
-model.add(Bidirectional(CuDNNLSTM(128, return_sequences = True)))
+model.add(Bidirectional(CuDNNLSTM(512, return_sequences = True)))
 
 model.add(GlobalMaxPool1D())
 
-model.add(Dense(10, activation="relu"))
+model.add(Dense(128, activation="relu"))
+model.add(Dense(32, activation="relu"))
 
 model.add(Dropout(0.5))
 
