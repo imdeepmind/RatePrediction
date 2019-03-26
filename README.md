@@ -35,9 +35,24 @@ In this case, I'm just using a tiny fraction of the dataset, more specifically, 
 The entire dataset is in `.tsv` format.
 
 ## Solution Architecture
+
+### 1. Step 1:
+First of all, the dataset is unbalanced. In other words, there is more sample for one class than others. The unbalanced dataset can cause several problems. To solve this problem, we need to balance the dataset. 
+
+![Unbalanced Dataset](https://user-images.githubusercontent.com/34741145/54993741-9312ca80-4fe8-11e9-87bb-576886d442c1.png)
+
+Clearly, there are so many 5 star rated products. To solve this I'll use `UnderSampler`. To learn about `UnderSampler`, click [here](https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.under_sampling.RandomUnderSampler.html)
+
+![UnderSampler](https://user-images.githubusercontent.com/34741145/54993890-f6046180-4fe8-11e9-872a-f1a716725e05.png)
+After balancing the dataset, the class distribution becomes balanced, or in other words, there are equal number of sample for each class
+
+![Balanced Dataset](https://user-images.githubusercontent.com/34741145/54994010-454a9200-4fe9-11e9-83f8-39cea9eff603.png)
+
+
 ## Training Performence
 ## Dependencies
 ## File Structure
 ## Run it Locally
 ## Acknowledgments
+- [Amazon Review Dataset](https://s3.amazonaws.com/amazon-reviews-pds/readme.html)
 
