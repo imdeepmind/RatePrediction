@@ -22,8 +22,6 @@ def get_pos(review):
     
     return pos
     
-    
-    
 def clean_review(review, instring=True):
     # Changing to lowercase
     review = review.lower()
@@ -47,7 +45,10 @@ def clean_review(review, instring=True):
     lemmatized_review = []
     for word in review:
         w,p = get_pos([word])[0]
-        w = lemmatizer.lemmatize(word, pos=p)
+        if p != '':
+            w = lemmatizer.lemmatize(word, pos=p)
+        else:
+            w = lemmatizer.lemmatize(word)
         lemmatized_review.append(w)
         
     

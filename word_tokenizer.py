@@ -1,7 +1,7 @@
 # Dependencies
 import pickle
 import pandas as pd
-from utils import clean_review, remove_stopwords
+from utils import clean_review
 from keras.preprocessing.text import Tokenizer
 
 # Max number of words
@@ -30,7 +30,6 @@ del data
 for i in range(len(reviews)):
     # Basic cleaning of the text
     review = clean_review(reviews[i])
-    review = remove_stopwords(review)
     
     # Fitting the tokenizer
     tokenizer.fit_on_texts([review])
