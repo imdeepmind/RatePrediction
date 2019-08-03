@@ -11,7 +11,7 @@ MAX_WORDS = 10000
 tokenizer = Tokenizer(num_words=MAX_WORDS)
     
 # Reading the dataset
-path = 'data/dataset.csv'
+path = 'dataset/dataset.csv'
 data = pd.read_csv(path)
 
 # For now I'll train the tokenizer only on 50000 reviews
@@ -42,5 +42,5 @@ for i in range(len(reviews)):
 del reviews
 
 # Saving the tokenizer as a pickle file
-with open('data/word_tokenizer.pickle', 'wb') as handle:
+with open('dataset/word_tokenizer.pickle', 'wb') as handle:
     pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)

@@ -2,8 +2,8 @@ import pandas as pd
 from imblearn.under_sampling import RandomUnderSampler
 
 # Dataset paths
-paths = ['data/amazon_reviews_us_Musical_Instruments_v1_00.tsv', 
-         'data/amazon_reviews_us_Office_Products_v1_00.tsv']
+paths = ['dataset/amazon_reviews_us_Musical_Instruments_v1_00.tsv', 
+         'dataset/amazon_reviews_us_Office_Products_v1_00.tsv']
 
 # Initializing RandomUnderSampler
 rus = RandomUnderSampler(random_state=1969)
@@ -14,6 +14,8 @@ ratings = []
 
 # Looping through the paths
 for path in paths:
+    print('--Processing first dataset {}th--'.format(path))
+    
     # Reading the dataset
     data = pd.read_csv(path, sep='\t', error_bad_lines=False)
     
@@ -32,6 +34,8 @@ for path in paths:
     
     # Deleting data to save space
     del data
+    
+    print('--Sampling dataset--')
     
     # Sampiling
     X, y = rus.fit_resample(X,y)
@@ -68,6 +72,9 @@ dataset['ratings'] = newRatings
 
 # Deleting reviews and newRatings array
 del newReviews, newRatings
-    
+
+# Shuffling the datset
+dataset = dataset.sample(frac=1)
+
 # Saving the data as a csv file
-dataset.to_csv('data/dataset.csv', index=False)
+dataset.to_csv('dataset/dataset.csv', index=False)

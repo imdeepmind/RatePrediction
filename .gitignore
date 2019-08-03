@@ -6,3 +6,9 @@ demo-app/api/env/
 demo-app/api/data/
 demo-app/webapp/node_modules/
 test.py
+
+
+
+
+preprocessing/dataset
+model/dataset
