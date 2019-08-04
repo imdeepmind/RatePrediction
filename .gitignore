@@ -10,5 +10,5 @@ test.py
 
 
 
-preprocessing/dataset
-model/dataset
+machine-learning/preprocessing/dataset
+machine-learning/model/dataset
