@@ -7,12 +7,12 @@ from keras.preprocessing.sequence import pad_sequences
 MAX_WORDS = 80
 
 # Main Model
-model = keras.models.load_model('data/model.h5')
+model = keras.models.load_model('dataset/model.h5')
 
 # Compiling the model
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-with open(r"data/word_tokenizer.pickle", "rb") as input_file:
+with open(r"dataset/word_tokenizer.pickle", "rb") as input_file:
     tokenizer = pickle.load(input_file)
     
 

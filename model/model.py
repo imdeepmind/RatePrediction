@@ -6,7 +6,7 @@ from keras.models import Sequential
 from keras.layers import CuDNNLSTM, Dense, Dropout, GlobalMaxPool1D, Bidirectional, Conv1D, MaxPooling1D
 from keras.layers.embeddings import Embedding
 
-with open(r"data/word_tokenizer.pickle", "rb") as input_file:
+with open(r"dataset/word_tokenizer.pickle", "rb") as input_file:
     tokenizer = pickle.load(input_file)
 
 MAX_WORDS = 80
@@ -15,7 +15,7 @@ VOCAB_SIZE = 10000
 EPOCHS = 10
 BATCH_SIZE = 1024
 
-dataset = np.load('data/preprocessed_dataset.npy')
+dataset = np.load('dataset/preprocessed_dataset.npy')
 
 X = dataset[:, 0:80]
 y = dataset[:, 80]
@@ -60,4 +60,4 @@ print(model.summary())
 
 model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=EPOCHS, batch_size=BATCH_SIZE)
 
-model.save('data/model.h5')
+model.save('dataset/model.h5')
