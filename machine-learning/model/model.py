@@ -23,7 +23,10 @@ BATCH_SIZE = 1024
 
 # Loading the dataset
 dataset = np.load('dataset/preprocessed_dataset.npy')
-dataset = dataset[0:1000, :]
+
+# For testing select a fraction of the dataset
+# dataset = dataset[0:1000, :]
+
 # Spliting into X and y
 X = dataset[:, 0:80]
 y = dataset[:, 80]
@@ -43,7 +46,7 @@ del X, y
 
 # Making the model
 model = Sequential()
-model.add(Embedding(VOCAB_SIZE, 32, input_length=MAX_WORDS))
+model.add(Embedding(VOCAB_SIZE, 128, input_length=MAX_WORDS))
 
 model.add(Dropout(0.5))
 
@@ -56,14 +59,14 @@ model.add(MaxPooling1D(3))
 model.add(Dropout(0.5))
 
 if GPU:
-    model.add(Bidirectional(CuDNNLSTM(512, return_sequences = True)))
+    model.add(Bidirectional(CuDNNLSTM(256, return_sequences = True)))
 else:
-    model.add(Bidirectional(LSTM(512, return_sequences = True)))
+    model.add(Bidirectional(LSTM(256, return_sequences = True)))
     
 model.add(GlobalMaxPool1D())
 
+model.add(Dense(256, activation="relu"))
 model.add(Dense(128, activation="relu"))
-model.add(Dense(32, activation="relu"))
 
 model.add(Dropout(0.5))
 
