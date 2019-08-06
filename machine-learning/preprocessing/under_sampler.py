@@ -2,7 +2,8 @@ import pandas as pd
 from imblearn.under_sampling import RandomUnderSampler
 
 # Dataset paths
-paths = ['dataset/amazon_reviews_us_Musical_Instruments_v1_00.tsv', 
+paths = ['dataset/amazon_reviews_us_Music_v1_00.tsv',
+         'dataset/amazon_reviews_us_Musical_Instruments_v1_00.tsv', 
          'dataset/amazon_reviews_us_Office_Products_v1_00.tsv']
 
 # Initializing RandomUnderSampler

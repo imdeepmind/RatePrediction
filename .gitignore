@@ -12,3 +12,4 @@ test.py
 
 machine-learning/preprocessing/dataset
 machine-learning/model/dataset
+machine-learning/model/weights

@@ -27,7 +27,6 @@ def clean_review(review, instring=True):
     
     # Changing he'll to he will
     review = re.sub(r"i'm", "i am", review)
-    
     review = re.sub(r"aren't", "are not", review)
     review = re.sub(r"couldn't", "counld not", review)
     review = re.sub(r"didn't", "did not", review)
@@ -51,13 +50,9 @@ def clean_review(review, instring=True):
     review = re.sub(r"wouldn't", "would not", review)
     
     review = re.sub(r"\'s", " is", review)
-    
     review = re.sub(r"\'ll", " will", review)
-    
     review = re.sub(r"\'ve", " have", review)
-    
     review = re.sub(r"\'re", " are", review)
-    
     review = re.sub(r"\'d", " would", review)
     
     # Removing links and other stuffs from string

@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # Note: Use LSTM if you dont have a NVDIA  else use CuDNNLSTM
-from keras.layers import LSTM, Dense, Dropout, GlobalMaxPool1D, Bidirectional, Conv1D, MaxPooling1D
+from keras.layers import LSTM, CuDNNLSTM, Dense, Dropout, GlobalMaxPool1D, Bidirectional, Conv1D, MaxPooling1D
 from keras.layers.embeddings import Embedding
 from keras.models import Sequential
 from keras.callbacks import EarlyStopping, ModelCheckpoint
@@ -14,6 +14,7 @@ with open(r"dataset/word_tokenizer.pickle", "rb") as input_file:
     tokenizer = pickle.load(input_file)
 
 # Constants for model configuration
+GPU = False
 MAX_WORDS = 80
 NO_OF_CLASSES = 5
 VOCAB_SIZE = 10000
@@ -22,7 +23,7 @@ BATCH_SIZE = 1024
 
 # Loading the dataset
 dataset = np.load('dataset/preprocessed_dataset.npy')
-
+dataset = dataset[0:1000, :]
 # Spliting into X and y
 X = dataset[:, 0:80]
 y = dataset[:, 80]
@@ -54,8 +55,11 @@ model.add(MaxPooling1D(3))
 
 model.add(Dropout(0.5))
 
-model.add(Bidirectional(LSTM(512, return_sequences = True)))
-
+if GPU:
+    model.add(Bidirectional(CuDNNLSTM(512, return_sequences = True)))
+else:
+    model.add(Bidirectional(LSTM(512, return_sequences = True)))
+    
 model.add(GlobalMaxPool1D())
 
 model.add(Dense(128, activation="relu"))
@@ -76,7 +80,7 @@ monitor = EarlyStopping(monitor='val_loss',
                         mode='min',
                         restore_best_weights=True)
 
-checkpoint = ModelCheckpoint()
+checkpoint = ModelCheckpoint(filepath="weights/model.{epoch:02d}-{val_loss:.2f}.h5")
 
 # Starting the training process
 model.fit(X_train, 
@@ -87,4 +91,4 @@ model.fit(X_train,
           callbacks=[monitor, checkpoint])
 
 # Saving the model
-model.save('dataset/model.h5')
+model.save('weights/model_best.h5')
