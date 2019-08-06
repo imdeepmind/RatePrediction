@@ -78,11 +78,13 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 # Printing the model summary
 print(model.summary())
 
+# Added early stopping system to monnitor validation loss on each epoch and stops training when validation loss start to increase
 monitor = EarlyStopping(monitor='val_loss', 
                         patience=5, 
                         mode='min',
                         restore_best_weights=True)
 
+# Saving the model in every epochs for some experiments
 checkpoint = ModelCheckpoint(filepath="weights/model.{epoch:02d}-{val_loss:.2f}.h5")
 
 # Starting the training process
