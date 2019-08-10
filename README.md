@@ -41,7 +41,7 @@ First of all, the dataset is unbalanced. In other words, there is more sample fo
 
 To solve this problem and balance the data, I'll use `UnderSampler`. To learn about `UnderSampler`, click [here](https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.under_sampling.RandomUnderSampler.html)
 
-![UnderSampler](https://user-images.githubusercontent.com/34741145/54993890-f6046180-4fe8-11e9-872a-f1a716725e05.png)
+![Under Sampler](https://user-images.githubusercontent.com/34741145/62822814-2f0f2e00-bba6-11e9-8f04-f4ffde718066.png)
 
 After using `Under Sampler` on the dataset, the class distribution becomes balanced, or in other words, there are an equal number of sample for each class
 
@@ -50,10 +50,12 @@ We all know that Machine Learning algorithms are just some math equations that p
 
 Work Tokenizing is a process of converting these word reviews into numbers.
 
-Here I'm using Keras Word Tokenizer. To learn more about Word Tokenizer, click [here](#https://keras.io/preprocessing/text/).
+Here I'm using Keras Word Tokenizer. To learn more about Word Tokenizer, click [here](https://keras.io/preprocessing/text/).
 
 ### Step 3: DL Model - 
 Finally, let's talk about the Deep Learning model. The model that I'm using here is a combination of CNN and LSTM recurrent neural network.
+
+![Model](https://user-images.githubusercontent.com/34741145/62822813-2f0f2e00-bba6-11e9-8c03-36f2cabe3b45.png)
 
 ## Dependencies
 Following are the dependencies of the project
