@@ -8,7 +8,7 @@ Predicting star ratings using Amazon Review Dataset and LSTM Recurrent Neural Ne
 - [Model](#model)
 - [Dependencies](#dependencies)
 - [File Structure](#file-structure)
-- [Future Targets](#future-targets)
+- [Future Improvements](#future-improvements)
 - [Acknowledgments](#acknowledgments)
 
 ## Introduction
@@ -73,7 +73,7 @@ The `demo` folder contains a demo app for the demo of this project. We can ignor
 The `machine-learning` folder is the main part of the application. This folder contains two subfolders `model` and `preprocessing`.
 The `model` folder contains the main model for this project. The `preprocessing` folder contains all the code for preprocessing the dataset.
 
-## Future Targets
+## Future Improvements
 Currently the model in only 50% accurate. So I have a target to increase the accuracy to 75%.
 
 ## Acknowledgments
